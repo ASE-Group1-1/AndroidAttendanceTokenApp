@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.clemens.helloase.MainActivity">
+    <item
+        android:id="@+id/action_qr"
+        android:orderInCategory="100"
+        android:title="@string/qr"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_download"
+        android:orderInCategory="100"
+        android:title="@string/download_guestbook"
+        app:showAsAction="never" />
+</menu>

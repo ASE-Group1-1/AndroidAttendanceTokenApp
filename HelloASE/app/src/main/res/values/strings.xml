@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Attendance Tracking Tool</string>
+    <string name="qr">Generate QR code</string>
+    <string name="download_guestbook">Download Guestbook</string>
+</resources>
