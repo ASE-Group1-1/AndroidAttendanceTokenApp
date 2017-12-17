@@ -57,18 +57,15 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_qr) {
             ImageView imageView = (ImageView) findViewById(R.id.imageView);
             TextView main_textview = (TextView) findViewById(R.id.textview_content);
-            //String url = "http://ase2016-148507.appspot.com/rest/guestbook/";
-            String url = "https://attendancetrackingdesktop.appspot.com/rest/attendance/token/get?studentId=03654230&weekNumber=1";
+            String url = "https://attendancetrackingdesktop.appspot.com/rest/attendance/token/get?studentId=112762937574526790868&weekNumber=1";
             try {
-                //String rawAnswer = new ClientResource(url).get().getText();
-                Bitmap bitmap = encodeAsBitmap("Clemens stinkt hart nach Maggi");
+                String rawAnswer = new ClientResource(url).get().getText();
+                Bitmap bitmap = encodeAsBitmap(rawAnswer);
                 imageView.setImageBitmap(bitmap);
-
             }
             catch(Exception exc) {
                 main_textview.setText(exc.getMessage());
             }
-
 
         }
         if (id == R.id.action_download) {
