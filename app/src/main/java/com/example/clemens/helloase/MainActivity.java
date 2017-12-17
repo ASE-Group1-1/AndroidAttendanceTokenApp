@@ -1,34 +1,44 @@
 package com.example.clemens.helloase;
 
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+
+import org.restlet.Client;
+import org.restlet.data.Method;
 import org.restlet.resource.ClientResource;
 
+import static android.graphics.Color.BLACK;
+import static android.graphics.Color.WHITE;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override
@@ -45,27 +55,57 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_qr) {
-            TextView main_textview = (TextView)findViewById(R.id.textview_content);
+            ImageView imageView = (ImageView) findViewById(R.id.imageView);
+            TextView main_textview = (TextView) findViewById(R.id.textview_content);
+            //String url = "http://ase2016-148507.appspot.com/rest/guestbook/";
+            String url = "https://attendancetrackingdesktop.appspot.com/rest/attendance/token/get?studentId=03654230&weekNumber=1";
+            try {
+                //String rawAnswer = new ClientResource(url).get().getText();
+                Bitmap bitmap = encodeAsBitmap("Clemens stinkt hart nach Maggi");
+                imageView.setImageBitmap(bitmap);
 
-            main_textview.setText("Show QR code");
+            }
+            catch(Exception exc) {
+                main_textview.setText(exc.getMessage());
+            }
+
+
         }
         if (id == R.id.action_download) {
             TextView main_textview = (TextView) findViewById(R.id.textview_content);
             String url = "http://ase2016-148507.appspot.com/rest/guestbook/";
-            System.out.println("1");
             try {
-                System.out.println("2");
                 String rawAnswer = new ClientResource(url).get().getText();
-                System.out.println("3");
                 main_textview.setText(rawAnswer);
-                System.out.println("4");
-                }
+            }
             catch(Exception exc) {
                 main_textview.setText(exc.getMessage());
             }
-            System.out.println("5");
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    Bitmap encodeAsBitmap(String str) throws WriterException {
+        BitMatrix result;
+        try {
+            result = new MultiFormatWriter().encode(str,
+                    BarcodeFormat.QR_CODE, 400, 400, null);
+        } catch (IllegalArgumentException iae) {
+            // Unsupported format
+            return null;
+        }
+        int w = result.getWidth();
+        int h = result.getHeight();
+        int[] pixels = new int[w * h];
+        for (int y = 0; y < h; y++) {
+            int offset = y * w;
+            for (int x = 0; x < w; x++) {
+                pixels[offset + x] = result.get(x, y) ? BLACK : WHITE;
+            }
+        }
+        Bitmap bitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        bitmap.setPixels(pixels, 0, w, 0, 0, w, h);
+        return bitmap;
     }
 }
