@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "163410639589",
+    "project_id": "attendancetrackingdesktop"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163410639589:android:50ffb2cb43aa3510",
+        "android_client_info": {
+          "package_name": "com.example.clemens.helloase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163410639589-fkbvn1aogeaapri15luim55v02al95no.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.clemens.helloase",
+            "certificate_hash": "1fbc2a83607a3072579623b67031c7f1c26cdfb8"
+          }
+        },
+        {
+          "client_id": "163410639589-0vd0tugd02nocg6f28oljt54u7lanhbf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDw_8dQXi6myYDyr_j73DqGoh6zKhjsGqE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
