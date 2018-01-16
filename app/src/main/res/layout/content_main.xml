@@ -20,16 +20,26 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="17dp"
-        tools:layout_editor_absoluteY="30dp"
+        android:contentDescription="qrcode"
         tools:ignore="MissingConstraints"
-        android:contentDescription="qrcode" />
+        tools:layout_editor_absoluteX="17dp"
+        tools:layout_editor_absoluteY="30dp" />
 
     <com.google.android.gms.common.SignInButton
         android:id="@+id/sign_in_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/sign_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign out"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone" />
+
 
 </android.support.constraint.ConstraintLayout>

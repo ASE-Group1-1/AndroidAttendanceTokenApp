@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +24,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -50,7 +53,7 @@ import static android.graphics.Color.WHITE;
 
 public class MainActivity extends AppCompatActivity{
     GoogleSignInClient mGoogleSignInClient;
-    private static int RC_SIGN_IN = 100;
+    private static int RC_SIGN_IN = 9001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,17 +73,51 @@ public class MainActivity extends AppCompatActivity{
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
        findViewById(R.id.sign_in_button).setOnClickListener(clickHandler);
     }
+
     View.OnClickListener clickHandler = new View.OnClickListener() {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.sign_in_button:
-                    Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                    startActivityForResult(signInIntent, RC_SIGN_IN);
+                    signIn();
                     break;
-                // ...
+                case R.id.sign_out:
+                    signOut();
+                    break;
             }
         }
     };
+
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        updateUI(null);
+
+                    }
+                });
+    }
+
+    private void updateUI(@Nullable GoogleSignInAccount account) {
+        TextView main_textview = (TextView) findViewById(R.id.textview_content);
+
+        if (account != null) {
+            main_textview.setText("Hallo" + account.getDisplayName());
+
+            findViewById(R.id.sign_in_button).setVisibility(View.GONE);
+            findViewById(R.id.sign_out).setVisibility(View.VISIBLE);
+        } else {
+            main_textview.setText("Signed out");
+
+            findViewById(R.id.sign_in_button).setVisibility(View.VISIBLE);
+            findViewById(R.id.sign_out).setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -95,21 +132,31 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // [START on_start_sign_in]
+        // Check for existing Google Sign In account, if the user is already signed in
+        // the GoogleSignInAccount will be non-null.
+        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+        //updateUI(account);
+        // [END on_start_sign_in]
+    }
+
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
-
             // Signed in successfully, show authenticated UI.
-            //updateUI(account);
-            TextView main_textview = (TextView) findViewById(R.id.textview_content);
-            main_textview.setText("Hi " + account.getDisplayName());
+            updateUI(account);
+
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             //Log.w(TAG, "signInResult:failed code=" + e.getStatusCode());
-            //updateUI(null);
+            updateUI(null);
             TextView main_textview = (TextView) findViewById(R.id.textview_content);
-            main_textview.setText(e.getMessage());
+            main_textview.setText("Fehlerode: " + e.getStatusCode());
         }
     }
 
