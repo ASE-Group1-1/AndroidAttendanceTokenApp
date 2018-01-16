@@ -68,9 +68,9 @@ public class MainActivity extends AppCompatActivity{
                 .build();
         // Build a GoogleSignInClient with the options specified by gso.
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-       // findViewById(R.id.sign_in_button).setOnClickListener(clickHandler);
+       findViewById(R.id.sign_in_button).setOnClickListener(clickHandler);
     }
-    /*View.OnClickListener clickHandler = new View.OnClickListener() {
+    View.OnClickListener clickHandler = new View.OnClickListener() {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.sign_in_button:
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity{
                 // ...
             }
         }
-    };*/
+    };
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
